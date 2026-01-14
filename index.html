@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NBA Parlay Simulator - Live</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            color: #fff;
+            padding: 20px;
+        }
+        .container { max-width: 1400px; margin: 0 auto; }
+        header { text-align: center; margin-bottom: 30px; }
+        h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(90deg, #ff6b35, #f7931e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .subtitle { color: #888; margin: 10px 0; }
+        .live-badge {
+            display: inline-block;
+            background: #4caf50;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+        .info-box {
+            background: rgba(33, 150, 243, 0.1);
+            border: 1px solid #2196f3;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            color: #2196f3;
+        }
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .card-label { color: #888; font-size: 0.8rem; margin-bottom: 8px; }
+        .card-value { font-size: 1.4rem; font-weight: bold; color: #ff6b35; }
+        .card-value.profit { color: #4ade80; }
+        .card-value.loss { color: #f87171; }
+        .section-title {
+            font-size: 1.3rem;
+            margin: 30px 0 15px;
+            color: #ff6b35;
+            border-bottom: 1px solid rgba(255, 107, 53, 0.3);
+            padding-bottom: 10px;
+        }
+        .table-container {
+            overflow-x: auto;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 20px;
+        }
+        table { width: 100%; border-collapse: collapse; min-width: 700px; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+        th { background: rgba(255, 107, 53, 0.1); color: #ff6b35; font-size: 0.85rem; text-transform: uppercase; }
+        .winner { color: #4ade80; font-weight: bold; }
+        .loser { color: #888; }
+        .odds-value { font-weight: bold; color: #f7931e; }
+        .payout { font-weight: bold; color: #4ade80; }
+        .day-header { background: rgba(255, 107, 53, 0.15); }
+        .day-header th { color: #ff6b35; font-size: 1rem; }
+        .parlay-row { background: rgba(74, 222, 128, 0.1); border-top: 2px solid #4ade80; }
+        .parlay-row td { font-weight: bold; }
+        .loading { text-align: center; padding: 50px; color: #888; }
+        .status-completed { color: #4ade80; }
+        .status-live { color: #ff6b35; }
+        .status-upcoming { color: #2196f3; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>NBA Parlay Simulator</h1>
+            <p class="subtitle">Forward Testing - GitHub Actions</p>
+            <div class="live-badge">🟢 AUTO-UPDATING</div>
+        </header>
+        <div id="content"><div class="loading">Loading data...</div></div>
+    </div>
+
+    <script>
+        const STAKE = 0.10;
+        const SHORT_NAMES = {
+            'Atlanta Hawks': 'Hawks', 'Boston Celtics': 'Celtics', 'Brooklyn Nets': 'Nets',
+            'Charlotte Hornets': 'Hornets', 'Chicago Bulls': 'Bulls', 'Cleveland Cavaliers': 'Cavs',
+            'Dallas Mavericks': 'Mavs', 'Denver Nuggets': 'Nuggets', 'Detroit Pistons': 'Pistons',
+            'Golden State Warriors': 'Warriors', 'Houston Rockets': 'Rockets', 'Indiana Pacers': 'Pacers',
+            'Los Angeles Clippers': 'Clippers', 'Los Angeles Lakers': 'Lakers', 'LA Clippers': 'Clippers',
+            'LA Lakers': 'Lakers', 'Memphis Grizzlies': 'Grizzlies', 'Miami Heat': 'Heat',
+            'Milwaukee Bucks': 'Bucks', 'Minnesota Timberwolves': 'Wolves', 'New Orleans Pelicans': 'Pelicans',
+            'New York Knicks': 'Knicks', 'Oklahoma City Thunder': 'Thunder', 'Orlando Magic': 'Magic',
+            'Philadelphia 76ers': '76ers', 'Phoenix Suns': 'Suns', 'Portland Trail Blazers': 'Blazers',
+            'Sacramento Kings': 'Kings', 'San Antonio Spurs': 'Spurs', 'Toronto Raptors': 'Raptors',
+            'Utah Jazz': 'Jazz', 'Washington Wizards': 'Wizards'
+        };
+
+        function shortName(n) { return SHORT_NAMES[n] || n; }
+        function toAmerican(d) { return d >= 2 ? '+' + Math.round((d-1)*100) : Math.round(-100/(d-1)); }
+
+        async function loadData() {
+            try {
+                const res = await fetch('data.json?' + Date.now());
+                const data = await res.json();
+                render(data);
+            } catch (e) {
+                document.getElementById('content').innerHTML = `<div class="loading">Error: ${e.message}<br>Make sure data.json exists.</div>`;
+            }
+        }
+
+        function render(data) {
+            const { games, dailyParlays, lastUpdate } = data;
+            let totalStaked = 0, totalPayout = 0, completedDays = 0;
+
+            Object.values(dailyParlays).forEach(p => {
+                if (p.allCompleted && p.payout) {
+                    totalStaked += STAKE;
+                    totalPayout += p.payout;
+                    completedDays++;
+                }
+            });
+
+            const profit = totalPayout - totalStaked;
+            const roi = totalStaked > 0 ? (profit / totalStaked * 100) : 0;
+
+            let html = `
+                <div class="info-box">
+                    <strong>🤖 GitHub Actions Running</strong> - Updates every 15 min during game hours<br>
+                    <small>Last update: ${lastUpdate ? new Date(lastUpdate).toLocaleString() : 'Never'}</small>
+                </div>
+                <div class="summary-cards">
+                    <div class="card"><div class="card-label">Games</div><div class="card-value">${Object.keys(games).length}</div></div>
+                    <div class="card"><div class="card-label">Days</div><div class="card-value">${Object.keys(dailyParlays).length}</div></div>
+                    <div class="card"><div class="card-label">Completed</div><div class="card-value">${completedDays}</div></div>
+                    <div class="card"><div class="card-label">Staked</div><div class="card-value">$${totalStaked.toFixed(2)}</div></div>
+                    <div class="card"><div class="card-label">Payout</div><div class="card-value profit">$${totalPayout.toFixed(2)}</div></div>
+                    <div class="card"><div class="card-label">Profit</div><div class="card-value ${profit>=0?'profit':'loss'}">${profit>=0?'+':''}$${profit.toFixed(2)}</div></div>
+                    <div class="card"><div class="card-label">ROI</div><div class="card-value ${roi>=0?'profit':'loss'}">${roi>=0?'+':''}${roi.toFixed(1)}%</div></div>
+                </div>
+            `;
+
+            const dates = Object.keys(dailyParlays).sort((a,b) => new Date(b) - new Date(a));
+
+            if (dates.length) {
+                html += `<h2 class="section-title">Daily Parlays</h2>`;
+                dates.forEach(dateKey => {
+                    const parlay = dailyParlays[dateKey];
+                    const dayGames = Object.values(games).filter(g => g.dateKey === dateKey).sort((a,b) => new Date(a.startTime) - new Date(b.startTime));
+                    const dateStr = new Date(dateKey+'T12:00:00').toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric'});
+
+                    html += `<div class="table-container"><table>
+                        <thead><tr class="day-header"><th colspan="7">${dateStr} - ${parlay.completedGames}/${parlay.totalGames} games</th></tr>
+                        <tr><th>Time</th><th>Away</th><th>Odds</th><th>Home</th><th>Odds</th><th>Score</th><th>Status</th></tr></thead><tbody>`;
+
+                    dayGames.forEach(g => {
+                        const time = new Date(g.startTime).toLocaleTimeString('en-US', {hour:'numeric', minute:'2-digit'});
+                        const awayC = g.completed ? (g.winner===g.awayTeam?'winner':'loser') : '';
+                        const homeC = g.completed ? (g.winner===g.homeTeam?'winner':'loser') : '';
+                        const score = g.completed ? `${g.awayScore}-${g.homeScore}` : '—';
+                        let status = '⏳', sClass = 'status-upcoming';
+                        if (g.completed) { status = '✅'; sClass = 'status-completed'; }
+                        else if (new Date(g.startTime) <= new Date()) { status = '🔴'; sClass = 'status-live'; }
+
+                        html += `<tr><td>${time}</td><td class="${awayC}">${shortName(g.awayTeam)}</td><td class="odds-value">${g.awayOdds?.toFixed(2)||'—'}</td><td class="${homeC}">${shortName(g.homeTeam)}</td><td class="odds-value">${g.homeOdds?.toFixed(2)||'—'}</td><td>${score}</td><td class="${sClass}">${status}</td></tr>`;
+                    });
+
+                    html += `<tr class="parlay-row"><td colspan="4"><strong>PARLAY</strong></td><td class="odds-value">${parlay.totalOdds ? toAmerican(parlay.totalOdds)+' ('+parlay.totalOdds.toFixed(2)+'x)':'—'}</td><td class="payout">${parlay.payout?'$'+parlay.payout.toFixed(2):'—'}</td><td>${parlay.allCompleted?'✅':'⏳'}</td></tr></tbody></table></div>`;
+                });
+            } else {
+                html += `<div class="info-box" style="text-align:center">No games yet. Data will appear once games are tracked.</div>`;
+            }
+
+            document.getElementById('content').innerHTML = html;
+        }
+
+        loadData();
+        setInterval(loadData, 60000);
+    </script>
+</body>
+</html>
