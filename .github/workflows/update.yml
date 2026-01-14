@@ -1,0 +1,33 @@
+name: Update NBA Parlay Data
+
+on:
+  schedule:
+    # Run every 15 minutes during NBA game hours (5 PM - 1 AM EST = 22:00-06:00 UTC)
+    - cron: '*/15 17-23 * * *'  # 5 PM - 11 PM EST
+    - cron: '*/15 0-6 * * *'    # 12 AM - 6 AM EST (next day UTC)
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Fetch NBA Data
+        env:
+          ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
+        run: node scripts/fetch-data.js
+
+      - name: Commit and Push
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add data.json
+          git diff --staged --quiet || git commit -m "Update NBA data $(date -u +"%Y-%m-%d %H:%M UTC")"
+          git push
