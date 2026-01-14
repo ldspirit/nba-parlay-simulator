@@ -1,6 +1,184 @@
 {
-  "games": {},
-  "dailyParlays": {},
-  "oddsFetchedDates": {},
-  "lastUpdate": null
+  "games": {
+    "6f6b6d68a82da7d2596969eccc9d8fc0": {
+      "id": "6f6b6d68a82da7d2596969eccc9d8fc0",
+      "homeTeam": "Philadelphia 76ers",
+      "awayTeam": "Cleveland Cavaliers",
+      "startTime": "2026-01-15T00:10:00Z",
+      "dateKey": "2026-01-15",
+      "homeOdds": 1.89,
+      "awayOdds": 1.96,
+      "completed": false,
+      "winner": null,
+      "homeScore": null,
+      "awayScore": null
+    },
+    "d998966ee14effe144f827ea24f55596": {
+      "id": "d998966ee14effe144f827ea24f55596",
+      "homeTeam": "Indiana Pacers",
+      "awayTeam": "Toronto Raptors",
+      "startTime": "2026-01-15T00:10:00Z",
+      "dateKey": "2026-01-15",
+      "homeOdds": 1.82,
+      "awayOdds": 2.04,
+      "completed": false,
+      "winner": null,
+      "homeScore": null,
+      "awayScore": null
+    },
+    "f05432db83b26af2b2bc075aa368d6c7": {
+      "id": "f05432db83b26af2b2bc075aa368d6c7",
+      "homeTeam": "New Orleans Pelicans",
+      "awayTeam": "Brooklyn Nets",
+      "startTime": "2026-01-15T01:10:00Z",
+      "dateKey": "2026-01-15",
+      "homeOdds": 1.86,
+      "awayOdds": 1.98,
+      "completed": false,
+      "winner": null,
+      "homeScore": null,
+      "awayScore": null
+    },
+    "f61d079e95dd2353146f2388afc9745c": {
+      "id": "f61d079e95dd2353146f2388afc9745c",
+      "homeTeam": "Chicago Bulls",
+      "awayTeam": "Utah Jazz",
+      "startTime": "2026-01-15T01:10:00Z",
+      "dateKey": "2026-01-15",
+      "homeOdds": 1.56,
+      "awayOdds": 2.52,
+      "completed": false,
+      "winner": null,
+      "homeScore": null,
+      "awayScore": null
+    },
+    "e344ae8d5874f424db7ff884ff5c7d4c": {
+      "id": "e344ae8d5874f424db7ff884ff5c7d4c",
+      "homeTeam": "Dallas Mavericks",
+      "awayTeam": "Denver Nuggets",
+      "startTime": "2026-01-15T02:40:00Z",
+      "dateKey": "2026-01-15",
+      "homeOdds": 1.7,
+      "awayOdds": 2.2,
+      "completed": false,
+      "winner": null,
+      "homeScore": null,
+      "awayScore": null
+    },
+    "d60e679b1c41fee318471829ca33d591": {
+      "id": "d60e679b1c41fee318471829ca33d591",
+      "homeTeam": "Sacramento Kings",
+      "awayTeam": "New York Knicks",
+      "startTime": "2026-01-15T03:10:00Z",
+      "dateKey": "2026-01-15",
+      "homeOdds": 4.8,
+      "awayOdds": 1.2,
+      "completed": false,
+      "winner": null,
+      "homeScore": null,
+      "awayScore": null
+    },
+    "670fc53d8277a283b49dcc1809a7c6a0": {
+      "id": "670fc53d8277a283b49dcc1809a7c6a0",
+      "homeTeam": "Los Angeles Clippers",
+      "awayTeam": "Washington Wizards",
+      "startTime": "2026-01-15T03:40:00Z",
+      "dateKey": "2026-01-15",
+      "homeOdds": 1.2,
+      "awayOdds": 4.85,
+      "completed": false,
+      "winner": null,
+      "homeScore": null,
+      "awayScore": null
+    },
+    "3c42c29ed4783164fd918abc996efd37": {
+      "id": "3c42c29ed4783164fd918abc996efd37",
+      "homeTeam": "Orlando Magic",
+      "awayTeam": "Memphis Grizzlies",
+      "startTime": "2026-01-15T19:10:00Z",
+      "dateKey": "2026-01-15",
+      "homeOdds": 1.53,
+      "awayOdds": 2.6,
+      "completed": false,
+      "winner": null,
+      "homeScore": null,
+      "awayScore": null
+    },
+    "e2a3dbd8d101d617f49495df16db2d11": {
+      "id": "e2a3dbd8d101d617f49495df16db2d11",
+      "homeTeam": "Detroit Pistons",
+      "awayTeam": "Phoenix Suns",
+      "startTime": "2026-01-16T00:10:00Z",
+      "dateKey": "2026-01-16",
+      "homeOdds": 1.43,
+      "awayOdds": 2.94,
+      "completed": false,
+      "winner": null,
+      "homeScore": null,
+      "awayScore": null
+    },
+    "363cf226fe2602130e774d952f7aba95": {
+      "id": "363cf226fe2602130e774d952f7aba95",
+      "homeTeam": "Miami Heat",
+      "awayTeam": "Boston Celtics",
+      "startTime": "2026-01-16T00:40:00Z",
+      "dateKey": "2026-01-16",
+      "homeOdds": 2.08,
+      "awayOdds": 1.79,
+      "completed": false,
+      "winner": null,
+      "homeScore": null,
+      "awayScore": null
+    },
+    "2ad9e0affab10cad1a66f8c7bc1ad959": {
+      "id": "2ad9e0affab10cad1a66f8c7bc1ad959",
+      "homeTeam": "Houston Rockets",
+      "awayTeam": "Oklahoma City Thunder",
+      "startTime": "2026-01-16T00:40:00Z",
+      "dateKey": "2026-01-16",
+      "homeOdds": 2.52,
+      "awayOdds": 1.56,
+      "completed": false,
+      "winner": null,
+      "homeScore": null,
+      "awayScore": null
+    },
+    "2bb59ddfd831a67347299ff05ffd9937": {
+      "id": "2bb59ddfd831a67347299ff05ffd9937",
+      "homeTeam": "San Antonio Spurs",
+      "awayTeam": "Milwaukee Bucks",
+      "startTime": "2026-01-16T01:10:00Z",
+      "dateKey": "2026-01-16",
+      "homeOdds": 1.38,
+      "awayOdds": 3.15,
+      "completed": false,
+      "winner": null,
+      "homeScore": null,
+      "awayScore": null
+    }
+  },
+  "dailyParlays": {
+    "2026-01-15": {
+      "totalGames": 8,
+      "completedGames": 0,
+      "allCompleted": false,
+      "totalOdds": null,
+      "payout": null,
+      "status": "pending"
+    },
+    "2026-01-16": {
+      "totalGames": 4,
+      "completedGames": 0,
+      "allCompleted": false,
+      "totalOdds": null,
+      "payout": null,
+      "status": "pending"
+    }
+  },
+  "oddsFetchedDates": {
+    "2026-01-14": 1768431125758
+  },
+  "lastUpdate": "2026-01-14T22:52:05.754Z",
+  "creditsRemaining": 497,
+  "creditsUsed": 3
 }
